@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get.dart';
+import 'package:mind/features/quiz/controllers/home_controller.dart';
 import 'package:mind/features/quiz/widgets/category_card.dart';
 import 'package:mind/features/quiz/widgets/circular_image.dart';
 import 'package:mind/features/quiz/widgets/quiz_setting.dart';
-
 import 'package:mind/utils/constants/colors.dart';
 import 'package:mind/utils/constants/images.dart';
 import 'package:mind/utils/constants/sizes.dart';
@@ -15,123 +13,112 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeController homeController = Get.put(HomeController());
+
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(
-            top: CSizes.appBarHeight,
-            left: CSizes.defaultSpace,
-            right: CSizes.defaultSpace),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Profile Section
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Hi, User",
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
-                    const Text(
-                      "Let's make the day productive",
-                    ),
-                  ],
-                ),
-
-                // Profile Image
-                const CustomCircularImage(
-                  image: '',
-                  height: 65,
-                  width: 65,
-                ),
-              ],
-            ),
-
-            // Space
-            const SizedBox(
-              height: CSizes.spaceBtwInputFields,
-            ),
-
-            // Rank Section
-            const RankSection(ranking: 384, points: 1209),
-
-            // Space
-            const SizedBox(
-              height: CSizes.spaceBtwInputFields,
-            ),
-
-            // Let's Play
-            Text(
-              "Let's play",
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-
-            const SizedBox(
-              height: CSizes.spaceBtwInputFields,
-            ),
-
-            // Grid
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                childAspectRatio: 0.8,
-                crossAxisSpacing: CSizes.defaultSpace,
-                mainAxisSpacing: CSizes.lg,
+      body: Obx(() {
+        if (homeController.isLoading.value) {
+          return const CircularProgressIndicator();
+        }
+        return Padding(
+          padding: const EdgeInsets.only(
+              top: CSizes.lg, left: CSizes.sm, right: CSizes.sm),
+          child: SingleChildScrollView(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.bottomSheet(
-                        const QuizSettingsBottomSheet(
-                          title: 'Sports',
+                  // AppBar Space
+                  const SizedBox(
+                    height: CSizes.defaultSpace,
+                  ),
+
+                  // Profile Section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Hi, ${homeController.user.value.uName}",
+                            style: Theme.of(context).textTheme.headlineLarge,
+                          ),
+                          const Text(
+                            "Let's make the day productive",
+                          ),
+                        ],
+                      ),
+
+                      // Profile Image
+                      CustomCircularImage(
+                        image: homeController.user.value.userImage,
+                        height: 65,
+                        width: 65,
+                      ),
+                    ],
+                  ),
+
+                  // Space
+                  const SizedBox(
+                    height: CSizes.spaceBtwInputFields,
+                  ),
+
+                  // Rank Section
+                  RankSection(
+                      ranking: homeController.user.value.ranking,
+                      points: homeController.user.value.points),
+
+                  // Space
+                  const SizedBox(
+                    height: CSizes.spaceBtwInputFields,
+                  ),
+
+                  // Let's Play
+                  Text(
+                    "Let's play",
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+
+                  const SizedBox(
+                    height: CSizes.spaceBtwInputFields,
+                  ),
+
+                  // Grid
+                  GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: homeController.categories.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.8,
+                      crossAxisSpacing: CSizes.defaultSpace,
+                      mainAxisSpacing: CSizes.lg,
+                    ),
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Get.bottomSheet(
+                            QuizSettingsBottomSheet(
+                              title: 'Sports',
+                              categoryId: homeController.categories[index].cId,
+                            ),
+                            isScrollControlled: true,
+                          );
+                        },
+                        child: CustomCategoryCard(
+                          category: homeController.categories[index].cName,
+                          getNumQ: homeController.getNumOfQuestions(
+                              homeController.categories[index].cId),
+                          imageString: homeController.categories[index].cImage,
                         ),
-                        isScrollControlled: true,
                       );
                     },
-                    child: const CustomCategoryCard(
-                      category: 'Sports',
-                      numOfQ: 35,
-                      imageString: CImages.sports,
-                    ),
                   ),
-                  const CustomCategoryCard(
-                    category: 'Sports',
-                    numOfQ: 35,
-                    imageString: CImages.animals,
-                  ),
-                  const CustomCategoryCard(
-                    category: 'Sports',
-                    numOfQ: 35,
-                    imageString: CImages.boilogy,
-                  ),
-                  const CustomCategoryCard(
-                    category: 'Sports',
-                    numOfQ: 35,
-                    imageString: CImages.art,
-                  ),
-                  const CustomCategoryCard(
-                    category: 'Sports',
-                    numOfQ: 35,
-                    imageString: CImages.computers,
-                  ),
-                  const CustomCategoryCard(
-                    category: 'Sports',
-                    numOfQ: 35,
-                    imageString: CImages.general,
-                  ),
-                  const CustomCategoryCard(
-                    category: 'Sports',
-                    numOfQ: 35,
-                    imageString: CImages.chemistry,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+                ]),
+          ),
+        );
+      }),
     );
   }
 }

@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mind/features/quiz/controllers/quiz_settings_controller.dart';
-import 'package:mind/features/quiz/screens/quiz_screen.dart';
 import 'package:mind/utils/constants/colors.dart';
 import 'package:mind/utils/constants/sizes.dart';
 
 class QuizSettingsBottomSheet extends StatelessWidget {
-  const QuizSettingsBottomSheet({super.key, required this.title});
+  const QuizSettingsBottomSheet(
+      {super.key, required this.title, required this.categoryId});
 
   final String title;
+  final int categoryId;
 
   @override
   Widget build(BuildContext context) {
+    // Controller
     final QuizSettingsController controller = Get.put(QuizSettingsController());
+
+    // Set CategoryId
+    controller.selectedCategory = categoryId;
+
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(CSizes.defaultSpace),
@@ -25,27 +31,35 @@ class QuizSettingsBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Category Name
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headlineSmall,
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.headlineSmall,
+              textAlign: TextAlign.left,
+            ),
           ),
           const SizedBox(
             height: CSizes.spaceBtwSections,
           ),
 
           // Number of questions
-          Text(
-            'Select Total Number of Questions',
-            style: Theme.of(context).textTheme.bodyLarge,
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              'Select Total Number of Questions',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
           ),
 
           const SizedBox(
             height: CSizes.spaceBtwInputFields,
           ),
+
           Obx(() {
             return Wrap(
               spacing: 10,
-              children: [10, 20, 30, 40, 50]
+              children: [5, 10, 15, 20, 25]
                   .map(
                     (number) => ChoiceChip(
                       label: Text(number.toString()),
@@ -64,9 +78,12 @@ class QuizSettingsBottomSheet extends StatelessWidget {
           ),
 
           // Difficulty level
-          Text(
-            'Select Difficulty',
-            style: Theme.of(context).textTheme.bodyLarge,
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              'Select Difficulty',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
           ),
 
           const SizedBox(
@@ -96,28 +113,8 @@ class QuizSettingsBottomSheet extends StatelessWidget {
 
           //Start quiz button
           ElevatedButton(
-            onPressed: () {
-              Get.off(
-                () => QuizScreen(
-                  currentQuestionNumber: 5,
-                  totalQuestions: 10,
-                  question:
-                      'What is the most popular sport throughout the world?',
-                  options: const [
-                    'Volleyball',
-                    'Football',
-                    'Basketball',
-                    'Badminton'
-                  ],
-                  selectedOptionIndex: 2,
-                  onOptionSelected: (index) {
-                    // Handle option selected
-                  },
-                  onNext: () {
-                    // Handle next button press
-                  },
-                ),
-              );
+            onPressed: () async {
+              controller.startQuiz();
             },
             child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: CSizes.md),

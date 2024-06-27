@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
+import 'package:mind/features/quiz/screens/quiz_screen.dart';
 
 class QuizSettingsController extends GetxController {
-  var selectedQuestions = 10.obs;
-  var selectedDifficulty = 'Easy'.obs;
+  int selectedCategory = 0;
+  RxInt selectedQuestions = 5.obs;
+  RxString selectedDifficulty = 'Easy'.obs;
 
   void setQuestions(int value) {
     selectedQuestions.value = value;
@@ -10,5 +12,12 @@ class QuizSettingsController extends GetxController {
 
   void setDifficulty(String value) {
     selectedDifficulty.value = value;
+  }
+
+  void startQuiz() {
+    Get.off(() => QuizScreen(
+        categoryId: selectedCategory,
+        numOfQ: selectedQuestions.value,
+        difficulty: selectedDifficulty.value.toLowerCase()));
   }
 }

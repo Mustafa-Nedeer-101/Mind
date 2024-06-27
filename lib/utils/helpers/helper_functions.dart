@@ -66,4 +66,25 @@ class UHelperFunctions {
 
     return null;
   }
+
+  // Decode HTML
+  String decodeHtmlEntities(String text) {
+    return text
+        .replaceAll('&quot;', '"')
+        .replaceAll('&apos;', "'")
+        .replaceAll('&#039;', "'")
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&nbsp;', ' ')
+        .replaceAll('&copy;', '©')
+        .replaceAll('&reg;', '®')
+        .replaceAll('&euro;', '€')
+        .replaceAll('&pound;', '£')
+        .replaceAll('&yen;', '¥')
+        .replaceAll('&cent;', '¢')
+        .replaceAll('&sect;', '§')
+        .replaceAll('&deg;', '°');
+    // Add more replacements as needed
+  }
 }

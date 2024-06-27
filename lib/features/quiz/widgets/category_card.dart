@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:mind/utils/constants/colors.dart';
 import 'package:mind/utils/constants/sizes.dart';
 
@@ -7,11 +6,12 @@ class CustomCategoryCard extends StatelessWidget {
   const CustomCategoryCard(
       {super.key,
       required this.category,
-      required this.numOfQ,
+      required this.getNumQ,
       required this.imageString});
 
   final String category, imageString;
-  final int numOfQ;
+  final Future<int> getNumQ;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -41,10 +41,27 @@ class CustomCategoryCard extends StatelessWidget {
                 const SizedBox(
                   height: CSizes.sm,
                 ),
-                Text(
-                  "$numOfQ questions",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                )
+
+                //
+                FutureBuilder(
+                  future: getNumQ,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting ||
+                        snapshot.hasError) {
+                      return Text(
+                        "0 questions",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      );
+                    }
+
+                    int numOfQ = snapshot.data ?? 0;
+
+                    return Text(
+                      "$numOfQ questions",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    );
+                  },
+                ),
               ],
             ),
           ),

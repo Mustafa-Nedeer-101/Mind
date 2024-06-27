@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:mind/features/quiz/screens/home_screen.dart';
+import 'package:mind/utils/constants/images.dart';
 
 class OnboardingController extends GetxController {
   static OnboardingController get instance => Get.find();
@@ -11,7 +13,7 @@ class OnboardingController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey();
 
   // called by the next button
-  void next() {
+  void next() async {
     // test for enabled
     if (isEnabled.value) {
       // validate text
@@ -19,11 +21,17 @@ class OnboardingController extends GetxController {
         usernameController.clear();
         isEnabled.value = false;
       } else {
-        // Save username to database
+        // Save username to Local Storage
+        final Map user = {
+          'name': usernameController.text,
+          'points': 0,
+          'image': CImages.defaultUserImage
+        };
+
+        GetStorage('Users').write('users', [user]);
+
         // Continue to home page
         Get.offAll(() => const HomeScreen());
-        // ignore: avoid_print
-        print('Continue to Home Page =========> ');
       }
     }
   }

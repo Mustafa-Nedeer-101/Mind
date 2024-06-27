@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mind/utils/constants/sizes.dart';
 
-class ShowQuestions extends StatelessWidget {
-  const ShowQuestions(
+class ShowQuestionsScreen extends StatelessWidget {
+  const ShowQuestionsScreen(
       {super.key,
       required this.questions,
       required this.answers,

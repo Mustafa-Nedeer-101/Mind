@@ -5,7 +5,7 @@ import 'package:mind/features/quiz/screens/home_screen.dart';
 import 'package:mind/features/quiz/screens/show_questions_screen.dart';
 import 'package:mind/utils/constants/colors.dart';
 
-class QuizFinishPage extends StatelessWidget {
+class QuizFinishScreen extends StatelessWidget {
   final String title;
   final Map<int, dynamic> answer;
   final List<String> listQuestion;
@@ -14,7 +14,7 @@ class QuizFinishPage extends StatelessWidget {
   final int score = 0;
   final nameController = TextEditingController();
 
-  QuizFinishPage(
+  QuizFinishScreen(
       {super.key,
       required this.title,
       required this.answer,
@@ -149,7 +149,7 @@ class QuizFinishPage extends StatelessWidget {
                   width: 280,
                   child: TextButton(
                     onPressed: () {
-                      Get.to(() => const ShowQuestions(questions: [
+                      Get.to(() => const ShowQuestionsScreen(questions: [
                             "What is the most popular sport throughtout the world?"
                           ], answers: [
                             'Basketball'
