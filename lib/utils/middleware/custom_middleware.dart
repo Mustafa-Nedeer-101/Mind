@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:mind/routing/routes.dart';
 import 'package:mind/utils/local_storage/storage_utility.dart';
 
@@ -12,7 +11,8 @@ class CustomMiddleware extends GetMiddleware {
 
   @override
   RouteSettings? redirect(String? route) {
-    if (GetStorage('Users').read('users') != null) {
+    final localStorage = ULocalStorage.instance();
+    if (localStorage.readData('users') != null) {
       return const RouteSettings(name: Routes.home);
     }
 

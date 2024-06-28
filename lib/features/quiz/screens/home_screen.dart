@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mind/features/quiz/controllers/home_controller.dart';
+import 'package:mind/features/quiz/screens/profile_screen.dart';
 import 'package:mind/features/quiz/widgets/category_card.dart';
 import 'package:mind/features/quiz/widgets/circular_image.dart';
 import 'package:mind/features/quiz/widgets/quiz_setting.dart';
+import 'package:mind/utils/audio/background_audio_utility.dart';
 import 'package:mind/utils/constants/colors.dart';
 import 'package:mind/utils/constants/images.dart';
 import 'package:mind/utils/constants/sizes.dart';
@@ -15,10 +17,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
 
+    BackgroundMusicController.playRandomSong();
+
     return Scaffold(
       body: Obx(() {
         if (homeController.isLoading.value) {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
         return Padding(
           padding: const EdgeInsets.only(
@@ -50,10 +54,15 @@ class HomeScreen extends StatelessWidget {
                       ),
 
                       // Profile Image
-                      CustomCircularImage(
-                        image: homeController.user.value.userImage,
-                        height: 65,
-                        width: 65,
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => const ProfileScreen());
+                        },
+                        child: CustomCircularImage(
+                          image: homeController.user.value.userImage,
+                          height: 65,
+                          width: 65,
+                        ),
                       ),
                     ],
                   ),
@@ -65,7 +74,9 @@ class HomeScreen extends StatelessWidget {
 
                   // Rank Section
                   RankSection(
-                      ranking: homeController.user.value.ranking,
+                      ranking: homeController.ranking.value != 0
+                          ? homeController.ranking.value
+                          : homeController.user.value.ranking,
                       points: homeController.user.value.points),
 
                   // Space

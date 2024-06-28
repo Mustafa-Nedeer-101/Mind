@@ -4,7 +4,7 @@ class ULocalStorage {
   late final GetStorage _storage;
 
   // Static member of the class
-  static bool isInitialized = false;
+  bool isInitialized = false;
 
   // Singleton instance
   static ULocalStorage? _instance;
@@ -12,6 +12,7 @@ class ULocalStorage {
   // Private constructor
   ULocalStorage._internal();
 
+  // Named constructor
   factory ULocalStorage.instance() {
     _instance ??= ULocalStorage._internal();
 
@@ -22,7 +23,7 @@ class ULocalStorage {
     await GetStorage.init(bucketName);
     _instance = ULocalStorage._internal();
     _instance!._storage = GetStorage(bucketName);
-    isInitialized = true;
+    _instance!.isInitialized = true;
   }
 
   // Generic method to save data

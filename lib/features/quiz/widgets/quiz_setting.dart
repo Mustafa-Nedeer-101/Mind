@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mind/features/quiz/controllers/quiz_settings_controller.dart';
+import 'package:mind/utils/audio/background_audio_utility.dart';
 import 'package:mind/utils/constants/colors.dart';
 import 'package:mind/utils/constants/sizes.dart';
 
@@ -13,6 +14,9 @@ class QuizSettingsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Stop Music
+    BackgroundMusicController.stopMusic();
+
     // Controller
     final QuizSettingsController controller = Get.put(QuizSettingsController());
 

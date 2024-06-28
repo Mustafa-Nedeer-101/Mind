@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mind/features/quiz/controllers/audio_controller.dart';
 import 'package:mind/features/quiz/controllers/question_controller.dart';
 import 'package:mind/features/quiz/models/question.dart';
 import 'package:mind/routing/routes.dart';
@@ -12,6 +13,7 @@ class QuizController extends GetxController {
       required this.difficulty});
 
   // variables
+  final AudioController audioController = Get.put(AudioController());
   RxBool isLoading = true.obs;
   final int categoryId;
   final int numOfQ;
@@ -52,6 +54,7 @@ class QuizController extends GetxController {
     // If quiz finished
     if (index == numOfQ - 1) {
       Get.offNamed(Routes.quizFinish);
+      audioController.playCongrats();
     }
 
     // Only if question Solved

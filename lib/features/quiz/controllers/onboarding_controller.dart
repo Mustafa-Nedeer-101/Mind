@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:mind/features/quiz/screens/home_screen.dart';
 import 'package:mind/utils/constants/images.dart';
+import 'package:mind/utils/local_storage/storage_utility.dart';
 
 class OnboardingController extends GetxController {
   static OnboardingController get instance => Get.find();
@@ -22,13 +22,16 @@ class OnboardingController extends GetxController {
         isEnabled.value = false;
       } else {
         // Save username to Local Storage
-        final Map user = {
+        final localStorage = ULocalStorage.instance();
+
+        final Map<String, dynamic> user = {
           'name': usernameController.text,
-          'points': 0,
+          'points': 10,
           'image': CImages.defaultUserImage
         };
 
-        GetStorage('Users').write('users', [user]);
+        //GetStorage('Users').write('users', [user]);
+        localStorage.saveData('users', [user]);
 
         // Continue to home page
         Get.offAll(() => const HomeScreen());
