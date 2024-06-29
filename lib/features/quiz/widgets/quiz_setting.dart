@@ -14,9 +14,6 @@ class QuizSettingsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Stop Music
-    BackgroundMusicController.stopMusic();
-
     // Controller
     final QuizSettingsController controller = Get.put(QuizSettingsController());
 
@@ -119,6 +116,8 @@ class QuizSettingsBottomSheet extends StatelessWidget {
           ElevatedButton(
             onPressed: () async {
               controller.startQuiz();
+              // Stop Music
+              BackgroundMusicController.stopMusic();
             },
             child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: CSizes.md),
