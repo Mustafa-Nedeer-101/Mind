@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:mind/features/quiz/data/ranking_repo.dart';
 import 'package:mind/features/quiz/models/category.dart';
 import 'package:mind/features/quiz/models/user.dart';
 import 'package:mind/utils/database/database_utility.dart';
@@ -9,19 +10,27 @@ class HomeController extends GetxController {
   static HomeController get instance => Get.find();
 
   // Variables
+  final RankingRepo rankingRepo = Get.put(RankingRepo());
   final UDatabase databaseUtility = Get.put(UDatabase());
+
   RxBool isLoading = true.obs;
+  RxInt ranking = 0.obs;
   RxList<CategoryModel> categories = <CategoryModel>[].obs;
   Rx<UserModel> user =
       UserModel(uId: 0, uName: '', points: 0, ranking: 0, userImage: '').obs;
 
   @override
   void onInit() async {
-    await getUser();
-    await getCategories();
+    try {
+      await getUser(); // From Local Storage
+      await getCategories(); // From Local Database
+      await getRanking(); // From Firestore Database
+    } catch (e) {
+      //
+      // ignore: avoid_print
+      print(e.toString());
+    }
 
-    // ignore: avoid_print
-    print('============> INITIALIZED');
     isLoading.value = false;
     super.onInit();
   }
@@ -54,6 +63,10 @@ class HomeController extends GetxController {
         userImage: imageUrl);
 
     return;
+  }
+
+  Future getRanking() async {
+    ranking.value = await rankingRepo.fetchRanking();
   }
 
   // Get all questions for specific category

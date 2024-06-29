@@ -12,13 +12,15 @@ class QuizFinishScreen extends StatelessWidget {
   final int correct = 0;
   final int incorrect = 0;
   final int score = 0;
+  final int? additionalPoints;
   final nameController = TextEditingController();
 
   QuizFinishScreen(
       {super.key,
       required this.title,
       required this.answer,
-      required this.listQuestion});
+      required this.listQuestion,
+      this.additionalPoints});
 
   @override
   Widget build(BuildContext context) {
@@ -183,30 +185,6 @@ class QuizFinishScreen extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          ),
-          Positioned(
-            bottom: -60,
-            left: -50,
-            child: Container(
-              width: 150,
-              height: 150,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/ballon2.png'), fit: BoxFit.cover),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: -60,
-            right: -20,
-            child: Container(
-              width: 150,
-              height: 150,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/ballon4.png'), fit: BoxFit.cover),
-              ),
             ),
           ),
         ],

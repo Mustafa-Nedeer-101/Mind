@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:mind/features/quiz/controllers/audio_controller.dart';
 import 'package:mind/features/quiz/controllers/quiz_controller.dart';
 import 'package:mind/features/quiz/models/question.dart';
 
@@ -7,6 +8,7 @@ class QuestionController extends GetxController {
 
   // variables
   final QuizController quizController = Get.find();
+  final AudioController audioController = Get.find();
 
   final QuestionModel question;
   final List<String> answers = [];
@@ -34,11 +36,17 @@ class QuestionController extends GetxController {
     // Should make logic based on the given answer
     if (answers[index] == question.correctAnswer) {
       correctAnswer.value = index;
+
+      // play
+      audioController.playCorrectAnswer();
     } else {
       correctAnswer.value =
           answers.indexWhere((element) => element == question.correctAnswer);
 
       incorrectAnswer.value = index;
+
+      // Play
+      audioController.playIncorrectAnswer();
     }
 
     // Mark question as solved

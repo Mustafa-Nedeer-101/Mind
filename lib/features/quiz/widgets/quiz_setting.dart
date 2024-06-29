@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mind/features/quiz/controllers/quiz_settings_controller.dart';
+import 'package:mind/utils/audio/background_audio_utility.dart';
 import 'package:mind/utils/constants/colors.dart';
 import 'package:mind/utils/constants/sizes.dart';
 
@@ -115,6 +116,8 @@ class QuizSettingsBottomSheet extends StatelessWidget {
           ElevatedButton(
             onPressed: () async {
               controller.startQuiz();
+              // Stop Music
+              BackgroundMusicController.stopMusic();
             },
             child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: CSizes.md),
