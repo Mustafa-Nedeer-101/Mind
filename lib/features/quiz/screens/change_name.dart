@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/get_core.dart';
+import 'package:get/get_instance/get_instance.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:mind/features/quiz/controllers/change_name_controller.dart';
+import 'package:mind/utils/constants/colors.dart';
 import 'package:mind/utils/constants/sizes.dart';
+import 'package:mind/utils/validators/validators.dart';
 
 class ChangeNameScreen extends StatelessWidget {
   const ChangeNameScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ChangeNameController changeNameController =
+        Get.put(ChangeNameController());
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -24,8 +32,11 @@ class ChangeNameScreen extends StatelessWidget {
           children: [
             // Heading
             Text(
-              'Use real name for easy verification. this name will appear on several pages.',
-              style: Theme.of(context).textTheme.labelMedium,
+              'Your name will not be added in the global ranking database, Choose a fun name.',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: CColors.lightGrey),
             ),
 
             const SizedBox(
@@ -33,13 +44,20 @@ class ChangeNameScreen extends StatelessWidget {
             ),
 
             Form(
+              key: changeNameController.changeNameKey,
               child: Column(
                 children: [
                   // First name
                   TextFormField(
+                    controller: changeNameController.changeNameController,
+                    validator: (String? value) {
+                      return UValidator.validateEmptyText('name', value);
+                    },
                     expands: false,
-                    decoration: const InputDecoration(
-                        labelText: 'Username', prefixIcon: Icon(Iconsax.user)),
+                    decoration: InputDecoration(
+                        labelStyle: Theme.of(context).textTheme.labelSmall,
+                        labelText: 'Name',
+                        prefixIcon: const Icon(Iconsax.user)),
                   ),
                 ],
               ),
@@ -53,7 +71,9 @@ class ChangeNameScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  changeNameController.saveName();
+                },
                 child: const Text("Save"),
               ),
             )

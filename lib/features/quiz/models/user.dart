@@ -1,9 +1,9 @@
 class UserModel {
-  final int uId;
-  final String uName;
-  final int points;
-  final int ranking;
-  final String userImage;
+  int uId;
+  String uName;
+  int points;
+  int ranking;
+  String userImage;
 
   UserModel(
       {required this.uId,

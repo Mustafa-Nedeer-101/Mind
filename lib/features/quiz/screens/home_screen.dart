@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mind/features/quiz/controllers/home_controller.dart';
-import 'package:mind/features/quiz/screens/profile_screen.dart';
+import 'package:mind/features/quiz/controllers/profile_screen_controller.dart';
+import 'package:mind/features/quiz/screens/profile.dart';
 import 'package:mind/features/quiz/widgets/category_card.dart';
 import 'package:mind/features/quiz/widgets/circular_image.dart';
 import 'package:mind/features/quiz/widgets/quiz_setting.dart';
-import 'package:mind/utils/audio/background_audio_utility.dart';
 import 'package:mind/utils/constants/colors.dart';
 import 'package:mind/utils/constants/images.dart';
 import 'package:mind/utils/constants/sizes.dart';
@@ -16,12 +16,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
-
-    BackgroundMusicController.playRandomSong();
+    final ProfileController profileController = Get.put(ProfileController());
 
     return Scaffold(
       body: Obx(() {
-        if (homeController.isLoading.value) {
+        if (homeController.isLoading.value ||
+            profileController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
         return Padding(
@@ -43,9 +43,12 @@ class HomeScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Hi, ${homeController.user.value.uName}",
-                            style: Theme.of(context).textTheme.headlineLarge,
+                          // User Name
+                          Obx(
+                            () => Text(
+                              "Hi, ${profileController.userName}",
+                              style: Theme.of(context).textTheme.headlineLarge,
+                            ),
                           ),
                           const Text(
                             "Let's make the day productive",
@@ -54,16 +57,23 @@ class HomeScreen extends StatelessWidget {
                       ),
 
                       // Profile Image
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(() => const ProfileScreen());
-                        },
-                        child: CustomCircularImage(
-                          image: homeController.user.value.userImage,
-                          height: 65,
-                          width: 65,
-                        ),
-                      ),
+                      Obx(() {
+                        if (profileController.isLoading.value) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(() => const ProfileScreen());
+                          },
+                          child: CustomCircularImage(
+                            image: profileController.userImage.value,
+                            height: 65,
+                            width: 65,
+                          ),
+                        );
+                      }),
                     ],
                   ),
 
@@ -75,9 +85,9 @@ class HomeScreen extends StatelessWidget {
                   // Rank Section
                   RankSection(
                       ranking: homeController.ranking.value != 0
-                          ? homeController.ranking.value
-                          : homeController.user.value.ranking,
-                      points: homeController.user.value.points),
+                          ? homeController.ranking.value.toString()
+                          : profileController.userRanking.value.toString(),
+                      points: profileController.userPoints.value),
 
                   // Space
                   const SizedBox(
@@ -111,7 +121,7 @@ class HomeScreen extends StatelessWidget {
                         onTap: () {
                           Get.bottomSheet(
                             QuizSettingsBottomSheet(
-                              title: 'Sports',
+                              title: homeController.categories[index].cName,
                               categoryId: homeController.categories[index].cId,
                             ),
                             isScrollControlled: true,
@@ -138,7 +148,7 @@ class HomeScreen extends StatelessWidget {
 class RankSection extends StatelessWidget {
   const RankSection({super.key, required this.ranking, required this.points});
 
-  final int ranking;
+  final String ranking;
   final int points;
   @override
   Widget build(BuildContext context) {
@@ -174,7 +184,7 @@ class RankSection extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     Text(
-                      "$ranking",
+                      ranking,
                       style: const TextStyle(
                           color: CColors.primary,
                           fontSize: 24,

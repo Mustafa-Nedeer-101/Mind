@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:get/state_manager.dart';
 import 'package:mind/common/texts/section_loader.dart';
+import 'package:mind/common/widgets/setting_menu_tile.dart';
+import 'package:mind/features/quiz/controllers/profile_screen_controller.dart';
+import 'package:mind/features/quiz/screens/change_name.dart';
 import 'package:mind/features/quiz/widgets/profile_menu.dart';
 import 'package:mind/features/quiz/widgets/profile_picture.dart';
 import 'package:mind/utils/constants/sizes.dart';
@@ -13,12 +13,16 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController = Get.find();
+
     return Scaffold(
+      appBar: AppBar(),
       // body
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(CSizes.defaultSpace),
-          child: Column(children: [
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // Profile Picture Section
             const ProfilePictureSection(),
 
@@ -32,9 +36,9 @@ class ProfileScreen extends StatelessWidget {
               height: CSizes.spaceBtwItems,
             ),
 
-            // Profile Information
+            // Your Information
             const CustomSectionHeader(
-              title: "Profile Information",
+              title: "Your Information",
               showActionButton: false,
             ),
 
@@ -44,9 +48,11 @@ class ProfileScreen extends StatelessWidget {
 
             Obx(
               () => ProfileMenu(
-                onPressed: () {},
-                title: "Username",
-                value: 'Musta',
+                onPressed: () {
+                  Get.to(() => const ChangeNameScreen());
+                },
+                title: "name",
+                value: profileController.userName.value,
               ),
             ),
 
@@ -60,9 +66,9 @@ class ProfileScreen extends StatelessWidget {
               height: CSizes.spaceBtwItems,
             ),
 
-            // Personal Information
+            // Options
             const CustomSectionHeader(
-              title: "Personal Information",
+              title: "Options",
               showActionButton: false,
             ),
 
@@ -70,10 +76,38 @@ class ProfileScreen extends StatelessWidget {
               height: CSizes.spaceBtwItems,
             ),
 
-            const Divider(),
+            // Enable Background Music
+            Obx(
+              () => CustomSettingMenuTile(
+                icon: Icons.music_note_rounded,
+                title: 'Background Music',
+                subTitle:
+                    'Enable or Disable the ability to play music in the background',
+                trailing: Switch(
+                    value: profileController.musicEnabled.value,
+                    onChanged: profileController.musicEnableDisable),
+              ),
+            ),
 
             const SizedBox(
               height: CSizes.spaceBtwItems,
+            ),
+
+            // Update Ranking Automatically
+            Obx(
+              () => CustomSettingMenuTile(
+                icon: Icons.star,
+                title: 'Update Ranking',
+                subTitle:
+                    'Automatically update ranking when there is an internet connection.',
+                trailing: Switch(
+                    value: profileController.updateRanking.value,
+                    onChanged: profileController.autoRankingUpdate),
+              ),
+            ),
+
+            const SizedBox(
+              height: CSizes.spaceBtwSections * 1.5,
             ),
 
             Center(

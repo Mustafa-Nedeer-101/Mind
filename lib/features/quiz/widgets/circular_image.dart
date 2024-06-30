@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mind/utils/constants/colors.dart';
 import 'package:mind/utils/constants/images.dart';
@@ -6,9 +8,8 @@ import 'package:mind/utils/constants/sizes.dart';
 class CustomCircularImage extends StatelessWidget {
   const CustomCircularImage(
       {super.key,
-      this.fit = BoxFit.fill,
+      this.fit = BoxFit.contain,
       required this.image,
-      this.isNetworkImage = false,
       this.overlayColor,
       this.backgroundColor,
       this.width = 56,
@@ -17,7 +18,6 @@ class CustomCircularImage extends StatelessWidget {
 
   final BoxFit? fit;
   final String image;
-  final bool isNetworkImage;
   final Color? overlayColor, backgroundColor;
   final double width, height, padding;
 
@@ -44,7 +44,7 @@ class CustomCircularImage extends StatelessWidget {
                     )
                   : Image(
                       fit: fit,
-                      image: AssetImage(image),
+                      image: FileImage(File(image)),
                       color: overlayColor,
                       height: height,
                       width: width,

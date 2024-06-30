@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mind/features/quiz/screens/home_screen.dart';
-import 'package:mind/utils/constants/images.dart';
 import 'package:mind/utils/local_storage/storage_utility.dart';
 
 class OnboardingController extends GetxController {
@@ -27,10 +26,12 @@ class OnboardingController extends GetxController {
         final Map<String, dynamic> user = {
           'name': usernameController.text,
           'points': 10,
-          'image': CImages.defaultUserImage
+          'image': '',
+          'ranking': '',
+          'musicEnabled': true,
+          'rankingUpdate': false,
         };
 
-        //GetStorage('Users').write('users', [user]);
         localStorage.saveData('users', [user]);
 
         // Continue to home page
