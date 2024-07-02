@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mind/features/quiz/controllers/audio_controller.dart';
 import 'package:mind/features/quiz/controllers/question_controller.dart';
+import 'package:mind/features/quiz/controllers/quiz_finish_controller.dart';
 import 'package:mind/features/quiz/models/question.dart';
 import 'package:mind/routing/routes.dart';
 import 'package:mind/utils/database/database_utility.dart';
@@ -16,20 +17,34 @@ class QuizController extends GetxController {
   final AudioController audioController = Get.put(AudioController());
   RxBool isLoading = true.obs;
   final int categoryId;
+  final String categoryName = '';
   final int numOfQ;
   final String difficulty;
   final UDatabase databaseUtility = Get.find();
 
+  List<QuestionModel> questions = [];
+
+  // For particular question
   RxBool questionSolved = false.obs;
   int index = 0;
-  List<QuestionModel> questions = [];
+
+  // Used by the Progress Indicator
   RxInt questionsSolved = 0.obs;
 
+  // Needed for quiz finish logic
+  List<String> questionTexts = [];
+  List<List<String>> answers = [];
+  List<int> correctIndexes = [];
+  List<int> incorrectIndexes = [];
+
+  int correctQuestions = 0;
+
+  // PageView Controller to control the questions pages' scrolls
   PageController pageController = PageController();
 
   // get Questions in initialization
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit(); // It's important to call super.onInit() at the beginning
     fetchData();
   }
@@ -53,7 +68,18 @@ class QuizController extends GetxController {
   void nextQuestion() {
     // If quiz finished
     if (index == numOfQ - 1) {
-      Get.offNamed(Routes.quizFinish);
+      Get.put(
+          QuizFinishController(
+              answers: answers,
+              numOfCorrectQuestions: correctQuestions,
+              questionTexts: questionTexts,
+              correctIndexes: correctIndexes,
+              incorrectIndexes: incorrectIndexes,
+              difficulty: difficulty),
+          permanent: true);
+      Get.offNamed(Routes.quizFinish)!.then((val) {
+        Get.delete<QuizFinishController>(force: true);
+      });
       audioController.playCongrats();
     }
 

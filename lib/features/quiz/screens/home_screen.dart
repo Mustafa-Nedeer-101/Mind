@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mind/features/quiz/controllers/home_controller.dart';
-import 'package:mind/features/quiz/controllers/profile_screen_controller.dart';
+import 'package:mind/features/quiz/controllers/profile_controller.dart';
 import 'package:mind/features/quiz/screens/profile.dart';
 import 'package:mind/features/quiz/widgets/category_card.dart';
 import 'package:mind/features/quiz/widgets/circular_image.dart';

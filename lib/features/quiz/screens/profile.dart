@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mind/common/texts/section_loader.dart';
 import 'package:mind/common/widgets/setting_menu_tile.dart';
-import 'package:mind/features/quiz/controllers/profile_screen_controller.dart';
+import 'package:mind/features/quiz/controllers/profile_controller.dart';
 import 'package:mind/features/quiz/screens/change_name.dart';
 import 'package:mind/features/quiz/widgets/profile_menu.dart';
 import 'package:mind/features/quiz/widgets/profile_picture.dart';

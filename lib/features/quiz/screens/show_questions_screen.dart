@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mind/features/quiz/controllers/quiz_finish_controller.dart';
+import 'package:mind/utils/constants/colors.dart';
 import 'package:mind/utils/constants/sizes.dart';
 
 class ShowQuestionsScreen extends StatelessWidget {
-  const ShowQuestionsScreen(
-      {super.key,
-      required this.questions,
-      required this.answers,
-      required this.correctAnswers});
+  const ShowQuestionsScreen({
+    super.key,
+  });
 
-  final List<String> questions;
-  final List<String> answers;
-  final List<String> correctAnswers;
   @override
   Widget build(BuildContext context) {
+    final QuizFinishController quizFinishController = Get.find();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -21,104 +21,138 @@ class ShowQuestionsScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: CSizes.sm),
+        padding: const EdgeInsets.symmetric(
+          horizontal: CSizes.sm,
+        ),
         child: ListView.builder(
-          itemCount: questions.length,
+          itemCount: quizFinishController.questionTexts.length,
           itemBuilder: (context, index) {
-            return Card(
-              child: Padding(
-                padding: const EdgeInsets.all(CSizes.sm),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      questions[index],
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontSize: 22,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: CSizes.spaceBtwItems,
-                    ),
-                    answers[index] == correctAnswers[index]
-                        ? Row(children: [
-                            RichText(
-                              text: TextSpan(children: [
-                                TextSpan(
-                                    text: 'Answer:  ',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge!
-                                        .copyWith(fontSize: 16)),
-                                TextSpan(
-                                    text: correctAnswers[index],
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge!
-                                        .copyWith(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.green)),
-                              ]),
-                            ),
-                            const SizedBox(
-                              width: CSizes.sm,
-                            ),
-                            const Icon(
-                              Icons.check_circle,
-                              color: Colors.green,
-                            )
-                          ])
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                  text: TextSpan(children: [
-                                TextSpan(
-                                    text: 'Answer:  ',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge!
-                                        .copyWith(fontSize: 16)),
-                                TextSpan(
-                                    text: answers[index],
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge!
-                                        .copyWith(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.red)),
-                              ])),
-                              RichText(
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                      text: 'Correct:  ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge!
-                                          .copyWith(fontSize: 16)),
-                                  TextSpan(
-                                      text: correctAnswers[index],
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge!
-                                          .copyWith(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green)),
-                                ]),
-                              ),
-                            ],
-                          )
-                  ],
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: CSizes.spaceBtwSections * 2,
+                  ),
+                  child: QuizQuestion(
+                      questionText: quizFinishController.questionTexts[index],
+                      correctAnswerIndex:
+                          quizFinishController.correctIndexes[index],
+                      incorrectAnswerIndex:
+                          quizFinishController.incorrectIndexes[index],
+                      answers: quizFinishController.answers[index]),
                 ),
-              ),
+
+                // Divider
+                if (index != quizFinishController.questionTexts.length - 1)
+                  const Column(
+                    children: [
+                      Divider(),
+                      SizedBox(
+                        height: CSizes.spaceBtwSections * 2,
+                      ),
+                    ],
+                  )
+              ],
             );
           },
         ),
       ),
+    );
+  }
+}
+
+//Given a Question
+class QuizQuestion extends StatelessWidget {
+  const QuizQuestion(
+      {super.key,
+      required this.questionText,
+      required this.correctAnswerIndex,
+      required this.incorrectAnswerIndex,
+      required this.answers});
+
+  final String questionText;
+  final List<String> answers;
+  final int correctAnswerIndex;
+  final int incorrectAnswerIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Question Text
+        Container(
+          padding: const EdgeInsets.only(
+              left: CSizes.md,
+              right: CSizes.md,
+              bottom: CSizes.md,
+              top: CSizes.spaceBtwSections),
+          width: double.infinity,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(CSizes.md),
+              color: CColors.darkerGrey),
+          child: Column(children: [
+            Text(
+              questionText,
+              style: const TextStyle(color: CColors.white, fontSize: 20.0),
+            ),
+
+            const SizedBox(
+              height: CSizes.spaceBtwSections,
+            ),
+
+            // Anwsers ListView
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: answers.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[900],
+                      borderRadius: BorderRadius.circular(CSizes.md),
+                      border: Border.all(
+                        color: index == correctAnswerIndex
+                            ? Colors.green
+                            : index == incorrectAnswerIndex
+                                ? Colors.red
+                                : Colors.grey[800]!,
+                        width: 2,
+                      ),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: 12.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          answers[index],
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 16.0),
+                        ),
+                        const Spacer(),
+                        if (correctAnswerIndex != -1)
+                          Icon(
+                            index == correctAnswerIndex
+                                ? Icons.check
+                                : index == incorrectAnswerIndex
+                                    ? Icons.close
+                                    : null,
+                            color: index == correctAnswerIndex
+                                ? Colors.green
+                                : index == incorrectAnswerIndex
+                                    ? Colors.red
+                                    : Colors.grey[800]!,
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ]),
+        ),
+      ],
     );
   }
 }

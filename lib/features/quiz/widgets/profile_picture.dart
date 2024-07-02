@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:mind/features/quiz/controllers/profile_screen_controller.dart';
+import 'package:mind/features/quiz/controllers/profile_controller.dart';
 import 'package:mind/features/quiz/widgets/circular_image.dart';
 import 'package:mind/utils/constants/sizes.dart';
 
