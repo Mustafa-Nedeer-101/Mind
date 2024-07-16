@@ -6,6 +6,7 @@ import 'package:mind/utils/theme/custom_themes/check_box_theme.dart';
 import 'package:mind/utils/theme/custom_themes/chip_theme.dart';
 import 'package:mind/utils/theme/custom_themes/elevated_button_theme.dart';
 import 'package:mind/utils/theme/custom_themes/outlined_button_theme.dart';
+import 'package:mind/utils/theme/custom_themes/text_button_theme.dart';
 import 'package:mind/utils/theme/custom_themes/text_form_field_theme.dart';
 import 'package:mind/utils/theme/custom_themes/text_theme.dart';
 
@@ -24,6 +25,7 @@ class CustomAppTheme {
     bottomSheetTheme: TBottomSheetTheme.lightBottomSheetTheme,
     checkboxTheme: TCheckBoxTheme.lightCheckBoxTheme,
     chipTheme: TChipTheme.lightChipTheme,
+    textButtonTheme: TTextButtonTheme.lightTextButtonTheme,
     elevatedButtonTheme: TElevatedButtonTheme.lightElevatedbuttonTheme,
     outlinedButtonTheme: TOutlinedButtonTheme.lightOutlinedButtonTheme,
     textTheme: TTextTheme.lightTextTheme,
@@ -42,6 +44,7 @@ class CustomAppTheme {
     bottomSheetTheme: TBottomSheetTheme.darkBottomSheetTheme,
     checkboxTheme: TCheckBoxTheme.darkCheckBoxTheme,
     chipTheme: TChipTheme.darkChipTheme,
+    textButtonTheme: TTextButtonTheme.darkTextButtonTheme,
     elevatedButtonTheme: TElevatedButtonTheme.darkElevatedbuttonTheme,
     outlinedButtonTheme: TOutlinedButtonTheme.darkOutlinedButtonTheme,
     textTheme: TTextTheme.darkTextTheme,

@@ -8,7 +8,7 @@ class TElevatedButtonTheme {
   static ElevatedButtonThemeData lightElevatedbuttonTheme =
       ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      elevation: 0,
+      elevation: 1,
       foregroundColor: Colors.white,
       backgroundColor: CColors.primary,
       disabledForegroundColor: Colors.grey,
