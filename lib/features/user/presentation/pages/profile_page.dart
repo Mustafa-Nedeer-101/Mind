@@ -5,18 +5,17 @@ import 'package:mind/features/user/presentation/controllers/profile_controller.d
 import 'package:mind/features/user/presentation/widgets/image_widget.dart';
 import 'package:mind/features/user/presentation/widgets/name_widget.dart';
 import 'package:mind/features/user/presentation/widgets/options_widget.dart';
+import '../../../../core/common/texts/section_loader.dart';
+import '../../../../core/constants/sizes.dart';
 
-import '../../../../common/texts/section_loader.dart';
-import '../../../../utils/constants/sizes.dart';
-
-class CustomProfilePage extends StatelessWidget {
-  const CustomProfilePage({
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CustomProfileController>(
+    return GetBuilder<ProfileController>(
       builder: (profileController) {
         if (profileController.user != null) {
           return Scaffold(
@@ -41,7 +40,7 @@ class CustomProfilePage extends StatelessWidget {
                       ),
 
                       // Profile Picture Section
-                      CustomProfileImage(
+                      ProfileImage(
                         user: profileController.user!.value,
                         profileController: profileController,
                       ),
@@ -60,7 +59,6 @@ class CustomProfilePage extends StatelessWidget {
                       // Your Information
                       const CustomSectionHeader(
                         title: "Your Information",
-                        showActionButton: false,
                       ),
 
                       const SizedBox(
@@ -68,7 +66,7 @@ class CustomProfilePage extends StatelessWidget {
                       ),
 
                       // Name
-                      CustomUserName(profileController: profileController),
+                      UserName(profileController: profileController),
 
                       const SizedBox(
                         height: CSizes.spaceBtwItems,
@@ -83,7 +81,6 @@ class CustomProfilePage extends StatelessWidget {
                       // Options
                       const CustomSectionHeader(
                         title: "Options",
-                        showActionButton: false,
                       ),
 
                       const SizedBox(
@@ -91,7 +88,7 @@ class CustomProfilePage extends StatelessWidget {
                       ),
 
                       // Enable Disable options
-                      CustomOptions(
+                      Options(
                           user: profileController.user!.value,
                           profileController: profileController),
 

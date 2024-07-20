@@ -1,16 +1,17 @@
 import 'package:get/get.dart';
+import 'package:mind/core/common/loaders/loaders.dart';
 import 'package:mind/features/user/presentation/controllers/profile_controller.dart';
 import 'package:mind/routing/routes.dart';
-import 'package:mind/utils/audio/audio_players.dart';
+import 'package:mind/core/helper_classes/audio_manager.dart';
 
-class CustomQuizFinishController extends GetxController {
+class QuizFinishController extends GetxController {
   final List<List<String>> answers;
   final int numOfCorrectQuestions;
   final List<String> questionTexts;
   final String difficulty;
   List<int> correctIndexes;
   List<int> incorrectIndexes;
-  CustomQuizFinishController(
+  QuizFinishController(
       {required this.answers,
       required this.numOfCorrectQuestions,
       required this.questionTexts,
@@ -19,23 +20,21 @@ class CustomQuizFinishController extends GetxController {
       required this.difficulty});
 
   // variables
-  final CustomProfileController profileController = Get.find();
+  final ProfileController profileController = Get.find();
+  bool alreadySaved = false;
 
-  RxBool isLoading = true.obs;
-  int additionalPoints = 0;
-  bool getsAdditional = false;
-  int score = 0;
-  int numOfIncorrectQuestions = 0;
+  late int additionalPoints = 0;
+  late bool getsAdditional = false;
+  late int score;
+  late int numOfIncorrectQuestions;
 
   Map<String, int> multipliers = {'easy': 1, 'medium': 3, 'hard': 5};
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
 
     calculatePoints();
-
-    isLoading.value = false;
   }
 
   calculatePoints() {
@@ -59,18 +58,24 @@ class CustomQuizFinishController extends GetxController {
   }
 
   savePoint() async {
-    // Save into Local Storage
-    await profileController.addPoints(pointsToAdd: score + additionalPoints);
+    if (!alreadySaved) {
+      // Save into Local Storage
+      await profileController.addPoints(pointsToAdd: score + additionalPoints);
+
+      alreadySaved = true;
+    } else {
+      CustomLoaders.customToast(message: 'Already saved your points');
+    }
   }
 
   homeScreen() {
     // Enable Music Again
-    CustomAudioPlayersController.musicEnabled = true;
+    CustomAudioPlayersManager.musicEnabled = true;
 
     // Go to Home Screen
     Get.offAllNamed(Routes.home);
 
     // Delete the quizFinishController
-    Get.delete<CustomQuizFinishController>(force: true);
+    Get.delete<QuizFinishController>(force: true);
   }
 }

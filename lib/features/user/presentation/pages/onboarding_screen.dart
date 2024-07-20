@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mind/features/user/presentation/controllers/onboarding_controller.dart';
-import 'package:mind/utils/constants/colors.dart';
-import 'package:mind/utils/constants/sizes.dart';
-import 'package:mind/utils/validators/validators.dart';
+import 'package:mind/core/constants/colors.dart';
+import 'package:mind/core/constants/sizes.dart';
+import 'package:mind/core/validators/validators.dart';
 
-class CustomOnboardingPage extends StatelessWidget {
-  const CustomOnboardingPage({super.key});
+class OnboardingPage extends StatelessWidget {
+  const OnboardingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,6 @@ class CustomOnboardingPage extends StatelessWidget {
               right: CSizes.defaultSpace),
           child: Column(
             children: [
-              // Logo
-
               // Space
               SizedBox(
                 height: 200.h,

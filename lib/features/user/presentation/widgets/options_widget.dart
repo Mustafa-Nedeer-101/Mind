@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 import 'package:mind/features/user/business/entities/user_intity.dart';
-
-import '../../../../common/widgets/setting_menu_tile.dart';
-import '../../../../utils/constants/sizes.dart';
+import '../../../../core/common/widgets/setting_menu_tile.dart';
+import '../../../../core/constants/sizes.dart';
 import '../controllers/profile_controller.dart';
 
-class CustomOptions extends StatelessWidget {
+class Options extends StatelessWidget {
   final UserEntity user;
-  final CustomProfileController profileController;
-  const CustomOptions(
+  final ProfileController profileController;
+  const Options(
       {super.key, required this.user, required this.profileController});
 
   @override

@@ -1,16 +1,16 @@
 import 'package:get/get.dart';
 import 'package:mind/features/questions/business/entities/question_entity.dart';
 import 'package:mind/features/questions/presentation/controllers/quiz_controller.dart';
-import 'package:mind/utils/audio/audio_players.dart';
+import 'package:mind/core/helper_classes/audio_manager.dart';
 
-class CustomQuestionController extends GetxController {
-  CustomQuestionController({
+class QuestionController extends GetxController {
+  QuestionController({
     required this.question,
     required this.quizController,
   });
 
   // variables
-  final CustomQuizController quizController;
+  final QuizController quizController;
 
   final QuestionEntity question;
   final List<String> answers = [];
@@ -48,7 +48,7 @@ class CustomQuestionController extends GetxController {
         quizController.incorrectIndexes.add(-1);
 
         // play
-        CustomAudioPlayersController.playCorrectAnswer();
+        CustomAudioPlayersManager.playCorrectAnswer();
       } else {
         correctAnswer.value =
             answers.indexWhere((element) => element == question.correctAnswer);
@@ -61,7 +61,7 @@ class CustomQuestionController extends GetxController {
         quizController.incorrectIndexes.add(index);
 
         // Play
-        CustomAudioPlayersController.playIncorrectAnswer();
+        CustomAudioPlayersManager.playIncorrectAnswer();
       }
 
       // Mark question as solved
@@ -74,6 +74,4 @@ class CustomQuestionController extends GetxController {
       quizController.answers.add(answers);
     }
   }
-
-  //
 }

@@ -1,6 +1,6 @@
 import 'package:mind/features/questions/data/models/question_model.dart';
-import 'package:mind/utils/database/database_utility.dart';
-import 'package:mind/utils/errors/exceptions.dart';
+import 'package:mind/core/errors/exceptions.dart';
+import '../../../../core/helper_classes/database_manager.dart';
 
 abstract class QuestionsLocalDataSource {
   Future<List<QuestionModel>> getQuestions(
@@ -10,17 +10,13 @@ abstract class QuestionsLocalDataSource {
 }
 
 class QuestionsLocalDataSourceImp implements QuestionsLocalDataSource {
-  final UDatabase database;
-
-  QuestionsLocalDataSourceImp({required this.database});
-
   @override
   Future<List<QuestionModel>> getQuestions(
       {required int categoryId,
       required String difficulty,
       required int numOfQ}) async {
     try {
-      final queryResponse = await database.readDatabase('''
+      final queryResponse = await DatabaseManager.readDatabase('''
         SELECT * FROM Questions
         WHERE categoryId = ? AND difficulty = ?
         ORDER BY RANDOM()
@@ -31,11 +27,13 @@ class QuestionsLocalDataSourceImp implements QuestionsLocalDataSource {
           .map((q) => QuestionModel.fromJson(q as Map<String, dynamic>))
           .toList();
 
+      if (questions.isEmpty) {
+        throw CacheException();
+      }
+
       return questions;
-    } on CacheException {
-      throw CacheException();
-    } catch (e) {
-      throw e.toString();
+    } on Exception {
+      rethrow;
     }
   }
 }

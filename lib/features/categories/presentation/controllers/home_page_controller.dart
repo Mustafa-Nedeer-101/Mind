@@ -1,19 +1,14 @@
 import 'package:get/get.dart';
-import 'package:mind/features/categories/business/usecases/get_categories.dart';
+import 'package:mind/features/categories/business/usecases/get_categories_usecase.dart';
 import 'package:mind/features/categories/data/datasources/categories_local_datasource.dart';
 import 'package:mind/features/categories/data/repositories/category_repo_imp.dart';
-import 'package:mind/utils/database/database_utility.dart';
-import 'package:mind/utils/errors/failure.dart';
-
+import 'package:mind/core/errors/failure.dart';
 import '../../business/enities/category_einity.dart';
 
-class CustomHomeController extends GetxController {
-  // UDatabase
-  static final UDatabase database = Get.put(UDatabase());
-
+class HomeController extends GetxController {
   // Repository
-  CategoryRepoImp repository = CategoryRepoImp(
-      dataSource: CategoriesLocalDataSourceImp(database: database));
+  CategoryRepoImp repository =
+      CategoryRepoImp(dataSource: CategoriesLocalDataSourceImp());
 
   // For Widget Display
   Failure? failure;
@@ -28,7 +23,7 @@ class CustomHomeController extends GetxController {
 
   void eitherFailureOrCategories() async {
     final failureOrCategories =
-        await GetCategories(categoryRepo: repository).call();
+        await GetCategoriesUsecase(categoryRepo: repository).call();
 
     failureOrCategories.fold(
       (newFailure) {

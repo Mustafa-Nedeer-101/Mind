@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mind/common/loaders/loaders.dart';
+import 'package:mind/core/common/loaders/loaders.dart';
 import 'package:mind/features/user/business/entities/user_intity.dart';
 import 'package:mind/features/user/business/usecases/change_user_iamge.dart';
 import 'package:mind/features/user/business/usecases/get_user_usecase.dart';
@@ -9,12 +9,12 @@ import 'package:mind/features/user/business/usecases/save_user_usecase.dart';
 import 'package:mind/features/user/data/datasources/user_local_data_source.dart';
 import 'package:mind/features/user/data/datasources/user_remote_datasource.dart';
 import 'package:mind/features/user/data/repositories/user_repo_imp.dart';
-import '../../../../utils/audio/audio_players.dart';
-import '../../../../utils/constants/images.dart';
-import '../../../../utils/constants/sizes.dart';
-import '../../../../utils/errors/failure.dart';
+import '../../../../core/helper_classes/audio_manager.dart';
+import '../../../../core/constants/images.dart';
+import '../../../../core/constants/sizes.dart';
+import '../../../../core/errors/failure.dart';
 
-class CustomProfileController extends GetxController {
+class ProfileController extends GetxController {
   // variables
   UserRepoImp repository = UserRepoImp(
     userLocalDataSource: UserLocalDataSourceImp(),
@@ -44,9 +44,8 @@ class CustomProfileController extends GetxController {
         user = newUser.obs;
 
         // Background Music
-        CustomAudioPlayersController.musicEnabled =
-            user!.value.musicEnabled.value;
-        CustomAudioPlayersController.start();
+        CustomAudioPlayersManager.musicEnabled = user!.value.musicEnabled.value;
+        CustomAudioPlayersManager.start();
         failure = null;
 
         update();
@@ -57,13 +56,13 @@ class CustomProfileController extends GetxController {
   // Background Music
   enableDisableMusic(bool val) async {
     user!.value.musicEnabled.value = val;
-    CustomAudioPlayersController.musicEnabled = val;
-    CustomAudioPlayersController.canPlay = val;
+    CustomAudioPlayersManager.musicEnabled = val;
+    CustomAudioPlayersManager.canPlay = val;
 
     if (val) {
-      CustomAudioPlayersController.playRandomSong();
+      CustomAudioPlayersManager.playRandomSong();
     } else {
-      CustomAudioPlayersController.stopMusic();
+      CustomAudioPlayersManager.stopMusic();
     }
 
     final failureOrBool =

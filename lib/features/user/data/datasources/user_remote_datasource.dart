@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 
 abstract class UserRemoteDataSource {
   Future<String> getRanking({required int points});
@@ -21,14 +20,8 @@ class UserRemoteDatasourceImp implements UserRemoteDataSource {
       });
 
       return userDoc.id;
-    } on FirebaseException {
+    } on Exception {
       rethrow;
-    } on FormatException {
-      rethrow;
-    } on PlatformException {
-      rethrow;
-    } catch (e) {
-      throw 'Could not create a remote log for you!';
     }
   }
 
@@ -44,14 +37,8 @@ class UserRemoteDatasourceImp implements UserRemoteDataSource {
       final usersGreater = snapshot.size;
 
       return (usersGreater + 1).toString();
-    } on FirebaseException {
+    } on Exception {
       rethrow;
-    } on FormatException {
-      rethrow;
-    } on PlatformException {
-      rethrow;
-    } catch (e) {
-      throw 'Could not get your points!';
     }
   }
 
@@ -64,14 +51,8 @@ class UserRemoteDatasourceImp implements UserRemoteDataSource {
       await documentSnapshot.update({'points': points});
 
       return points;
-    } on FirebaseException {
+    } on Exception {
       rethrow;
-    } on FormatException {
-      rethrow;
-    } on PlatformException {
-      rethrow;
-    } catch (e) {
-      throw 'Could not save your points!';
     }
   }
 }

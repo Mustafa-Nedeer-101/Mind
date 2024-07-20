@@ -1,21 +1,16 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mind/features/user/business/entities/user_intity.dart';
 import 'package:mind/features/user/business/repositories/user_repo.dart';
 import 'package:mind/features/user/data/datasources/user_local_data_source.dart';
 import 'package:mind/features/user/data/datasources/user_remote_datasource.dart';
-
 import 'package:mind/features/user/data/models/user_model.dart';
-import 'package:mind/utils/errors/exceptions.dart';
-
-import 'package:mind/utils/errors/failure.dart';
+import 'package:mind/core/errors/exceptions.dart';
+import 'package:mind/core/errors/failure.dart';
 import 'package:path_provider/path_provider.dart';
-
-import '../../../../utils/controllers/network_manager.dart';
+import '../../../../core/helper_classes/network_manager.dart';
 
 class UserRepoImp implements UserRepo {
   final UserLocalDataSource userLocalDataSource;
@@ -47,11 +42,14 @@ class UserRepoImp implements UserRepo {
       final File localImage = await imageFile
           .copy('$path/profile_image_${Timestamp.now().toDate()}.png');
 
-      await userLocalDataSource.changeUserImage(path: imageFile.path);
+      user.image.value = imageFile.path;
+      await userLocalDataSource.saveUser(user: user);
 
       return Right(localImage.path);
-    } catch (e) {
-      return Left(CacheFailure(errorMessage: e.toString()));
+    } on CacheException {
+      return Left(CacheFailure(errorMessage: 'Cache Exception Occured'));
+    } on Exception catch (e) {
+      return Left(UnknownFailure(errorMessage: e.toString()));
     }
   }
 
@@ -61,17 +59,19 @@ class UserRepoImp implements UserRepo {
       await userLocalDataSource.saveUser(user: user);
 
       return const Right(true);
-    } catch (e) {
-      return Left(CacheFailure(errorMessage: e.toString()));
+    } on CacheException {
+      return Left(CacheFailure(errorMessage: 'Cache Exception Occured'));
+    } on Exception catch (e) {
+      return Left(UnknownFailure(errorMessage: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, UserEntity>> getUser() async {
+  Future<Either<Failure, UserModel>> getUser() async {
     try {
       UserModel user = await userLocalDataSource.getUser();
 
-      final bool isConnected = await NetworkManager.instance.isConnected();
+      final bool isConnected = await NetworkManager.isConnected();
 
       // Set Updated Ranking
       if (isConnected && user.rankingUpdate.value) {
@@ -92,15 +92,9 @@ class UserRepoImp implements UserRepo {
 
       userLocalDataSource.saveUser(user: user);
       return Right(user);
-    } on FirebaseException catch (e) {
-      return Left(FirebaseFailure(errorMessage: e.code));
-    } on FormatException catch (e) {
-      return Left(FormatFailure(errorMessage: e.message));
-    } on PlatformException catch (e) {
-      return Left(PlatformFailure(errorMessage: e.code));
-    } on CacheException catch (e) {
-      return Left(CacheFailure(errorMessage: e.toString()));
-    } catch (e) {
+    } on CacheException {
+      return Left(CacheFailure(errorMessage: 'Cache Exception Occured'));
+    } on Exception catch (e) {
       return Left(UnknownFailure(errorMessage: e.toString()));
     }
   }

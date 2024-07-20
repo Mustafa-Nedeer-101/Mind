@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mind/features/categories/presentation/pages/home_page.dart';
-import 'package:mind/utils/local_storage/storage_utility.dart';
+import 'package:mind/features/categories/presentation/pages/home/home_page.dart';
+import 'package:mind/core/helper_classes/get_storage_manager.dart';
 
 class CustomOnboardingController extends GetxController {
   static CustomOnboardingController get instance => Get.find();
@@ -21,7 +21,7 @@ class CustomOnboardingController extends GetxController {
         isEnabled.value = false;
       } else {
         // Save username to Local Storage
-        final localStorage = ULocalStorage.instance();
+        final localStorage = GetStorageManager.instance();
 
         final Map<String, dynamic> user = {
           'name': usernameController.text,
@@ -36,7 +36,7 @@ class CustomOnboardingController extends GetxController {
         localStorage.saveData('users', [user]);
 
         // Continue to home page
-        Get.offAll(() => const CustomHomePage());
+        Get.offAll(() => const HomePage());
       }
     }
   }

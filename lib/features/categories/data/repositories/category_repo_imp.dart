@@ -1,10 +1,8 @@
 import 'package:dartz/dartz.dart';
-
-import 'package:mind/features/categories/business/enities/category_einity.dart';
 import 'package:mind/features/categories/data/datasources/categories_local_datasource.dart';
-
-import 'package:mind/utils/errors/failure.dart';
-
+import 'package:mind/features/categories/data/models/category_model.dart';
+import 'package:mind/core/errors/exceptions.dart';
+import 'package:mind/core/errors/failure.dart';
 import '../../business/repositories/category_repo.dart';
 
 class CategoryRepoImp implements CategoryRepo {
@@ -12,17 +10,15 @@ class CategoryRepoImp implements CategoryRepo {
 
   CategoryRepoImp({required this.dataSource});
   @override
-  Future<Either<Failure, List<CategoryEntity>>> getCategories() async {
+  Future<Either<Failure, List<CategoryModel>>> getCategories() async {
     try {
-      final List<CategoryEntity> categories = await dataSource.getCategories();
-
-      if (categories.isEmpty) {
-        return Left(CacheFailure(errorMessage: 'We Found Empty Categories'));
-      }
+      final List<CategoryModel> categories = await dataSource.getCategories();
 
       return Right(categories);
-    } catch (e) {
-      return Left(CacheFailure(errorMessage: e.toString()));
+    } on CacheException {
+      return Left(CacheFailure(errorMessage: 'Cache Exception Occured'));
+    } on Exception catch (e) {
+      return Left(UnknownFailure(errorMessage: e.toString()));
     }
   }
 }

@@ -1,15 +1,12 @@
 import 'package:mind/features/user/data/models/user_model.dart';
-import 'package:mind/utils/errors/exceptions.dart';
-import 'package:mind/utils/local_storage/storage_utility.dart';
-
+import 'package:mind/core/errors/exceptions.dart';
+import 'package:mind/core/helper_classes/get_storage_manager.dart';
 import '../../business/entities/user_intity.dart';
 
 abstract class UserLocalDataSource {
   Future<UserModel> getUser();
 
   Future<UserEntity> saveUser({required UserEntity user});
-
-  Future<String?> changeUserImage({required String path});
 }
 
 const userName = 'name';
@@ -22,38 +19,28 @@ const userRankingUpdate = 'rankingUpdate';
 
 class UserLocalDataSourceImp implements UserLocalDataSource {
   @override
-  Future<String?> changeUserImage({required String path}) async {
-    try {
-      final storage = ULocalStorage.instance();
-      List users = await storage.readData('users');
-      final user = users[0];
-      user[userImage] = path;
-
-      await storage.saveData('users', users);
-
-      return path;
-    } catch (e) {
-      throw CacheException();
-    }
-  }
-
   @override
   Future<UserModel> getUser() async {
     try {
-      final storage = ULocalStorage.instance();
-      List users = await storage.readData('users');
+      final storage = GetStorageManager.instance();
+      final users = await storage.readData('users');
+
+      if (users == null) {
+        throw CacheException();
+      }
+
       final user = users[0];
 
       return UserModel.fromJson(user as Map<String, dynamic>);
-    } catch (e) {
-      throw CacheException();
+    } on Exception {
+      rethrow;
     }
   }
 
   @override
   Future<UserEntity> saveUser({required UserEntity user}) async {
     try {
-      final storage = ULocalStorage.instance();
+      final storage = GetStorageManager.instance();
       List users = await storage.readData('users');
       final currentUser = users[0];
 
@@ -68,8 +55,8 @@ class UserLocalDataSourceImp implements UserLocalDataSource {
       storage.saveData('users', users);
 
       return user;
-    } catch (e) {
-      throw CacheException();
+    } on Exception {
+      rethrow;
     }
   }
 }

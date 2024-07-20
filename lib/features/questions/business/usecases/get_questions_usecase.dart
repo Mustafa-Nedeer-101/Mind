@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:mind/features/questions/business/entities/question_entity.dart';
 import 'package:mind/features/questions/business/repositories/questions_repo.dart';
-import 'package:mind/utils/errors/failure.dart';
+import 'package:mind/core/errors/failure.dart';
 
 class GetQuestionsUsecase {
   final QuestionsRepo repo;

@@ -1,23 +1,17 @@
-import 'package:mind/features/categories/business/enities/category_einity.dart';
 import 'package:mind/features/categories/data/models/category_model.dart';
-import 'package:mind/utils/errors/exceptions.dart';
+import 'package:mind/core/errors/exceptions.dart';
+import 'package:mind/core/helper_classes/database_manager.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../../utils/database/database_utility.dart';
-
 abstract class CategoriesLocalDataSource {
-  Future<List<CategoryEntity>> getCategories();
+  Future<List<CategoryModel>> getCategories();
 }
 
 class CategoriesLocalDataSourceImp implements CategoriesLocalDataSource {
-  final UDatabase database;
-
-  CategoriesLocalDataSourceImp({required this.database});
-
   @override
-  Future<List<CategoryEntity>> getCategories() async {
+  Future<List<CategoryModel>> getCategories() async {
     try {
-      final dbResponse = await database.readDatabase('''
+      final dbResponse = await DatabaseManager.readDatabase('''
         SELECT * FROM Categories
       ''');
 
@@ -25,12 +19,13 @@ class CategoriesLocalDataSourceImp implements CategoriesLocalDataSource {
           .map((cat) => CategoryModel.fromJson(cat as Map<String, dynamic>))
           .toList();
 
-      // Assign each category an number of questions
+      // Assign each category a number of questions
       for (final category in categories) {
         int cId = category.id;
 
-        List<Map<dynamic, dynamic>> queryResult = await database.readDatabase(
-            'SELECT COUNT(*) FROM Questions WHERE categoryId = ?', [cId]);
+        List<Map<dynamic, dynamic>> queryResult =
+            await DatabaseManager.readDatabase(
+                'SELECT COUNT(*) FROM Questions WHERE categoryId = ?', [cId]);
 
         int? numOfQustions =
             Sqflite.firstIntValue(queryResult as List<Map<String, Object?>>);
@@ -38,9 +33,13 @@ class CategoriesLocalDataSourceImp implements CategoriesLocalDataSource {
         category.numberOfQuestions = numOfQustions ?? 0;
       }
 
+      if (categories.isEmpty) {
+        throw CacheException();
+      }
+
       return categories;
-    } catch (e) {
-      throw CacheException();
+    } on Exception {
+      rethrow;
     }
   }
 }

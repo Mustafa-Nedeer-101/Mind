@@ -4,7 +4,7 @@ import 'package:mind/features/user/presentation/controllers/profile_controller.d
 
 class CustomChangeNameController extends GetxController {
   // variables
-  final CustomProfileController profileController = Get.find();
+  final ProfileController profileController = Get.find();
   GlobalKey<FormState> changeNameKey = GlobalKey();
   TextEditingController changeNameController = TextEditingController();
 

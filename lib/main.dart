@@ -2,17 +2,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:mind/bindings/general_binding.dart';
 import 'package:mind/firebase_options.dart';
 import 'package:mind/routing/app_routes.dart';
-import 'package:mind/utils/local_storage/storage_utility.dart';
-import 'package:mind/utils/theme/app_theme.dart';
+import 'package:mind/core/helper_classes/get_storage_manager.dart';
+import 'package:mind/core/theme/app_theme.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Local Get Storage Initialization
-  await ULocalStorage.init('Users');
+  await GetStorageManager.init('Users');
+
+  // Make the app awake
+  WakelockPlus.enable();
 
   // Firebase Initialization
   await Firebase.initializeApp(
@@ -36,7 +39,6 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Mind',
         theme: CustomAppTheme.darkTheme,
-        initialBinding: GeneralBindings(),
         getPages: AppRoutes.pages,
       ),
     );

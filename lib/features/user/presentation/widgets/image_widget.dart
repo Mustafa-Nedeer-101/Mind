@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-
 import 'package:mind/features/user/business/entities/user_intity.dart';
-import 'package:mind/utils/constants/sizes.dart';
-import '../../../../common/widgets/circular_image.dart';
+import 'package:mind/core/constants/sizes.dart';
+import '../../../../core/common/widgets/circular_image.dart';
 import '../controllers/profile_controller.dart';
 
-class CustomProfileImage extends StatelessWidget {
+class ProfileImage extends StatelessWidget {
   final UserEntity user;
-  final CustomProfileController profileController;
-  const CustomProfileImage(
+  final ProfileController profileController;
+  const ProfileImage(
       {super.key, required this.user, required this.profileController});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
+    return Align(
+      alignment: Alignment.center,
       child: Column(
         children: [
           GestureDetector(
@@ -26,8 +25,6 @@ class CustomProfileImage extends StatelessWidget {
             },
             child: Obx(
               () => CustomCircularImage(
-                width: 80,
-                height: 80,
                 image: profileController.user!.value.image.value,
               ),
             ),

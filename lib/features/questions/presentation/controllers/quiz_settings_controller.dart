@@ -1,14 +1,13 @@
 import 'package:get/get.dart';
-import 'package:mind/utils/audio/audio_players.dart';
-
+import 'package:mind/core/helper_classes/audio_manager.dart';
 import '../../../user/presentation/controllers/profile_controller.dart';
-import '../pages/quiz_page.dart';
+import '../pages/quiz/quiz_page.dart';
 
 class CustomQuizSettingsController extends GetxController {
   int selectedCategory = 0;
   RxInt selectedQuestions = 5.obs;
   RxString selectedDifficulty = 'Easy'.obs;
-  final CustomProfileController profileController = Get.find();
+  final ProfileController profileController = Get.find();
 
   void setQuestions(int value) {
     selectedQuestions.value = value;
@@ -20,10 +19,10 @@ class CustomQuizSettingsController extends GetxController {
 
   void startQuiz() {
     // Stop Music
-    CustomAudioPlayersController.stopMusic();
-    CustomAudioPlayersController.musicEnabled = false;
+    CustomAudioPlayersManager.stopMusic();
+    CustomAudioPlayersManager.musicEnabled = false;
 
-    Get.off(() => CustomQuizPage(
+    Get.off(() => QuizPage(
         categoryId: selectedCategory,
         numOfQ: selectedQuestions.value,
         difficulty: selectedDifficulty.value.toLowerCase()));

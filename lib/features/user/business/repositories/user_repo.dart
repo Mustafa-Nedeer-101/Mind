@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:mind/features/user/business/entities/user_intity.dart';
-import 'package:mind/utils/errors/failure.dart';
+import 'package:mind/core/errors/failure.dart';
 
 abstract class UserRepo {
   Future<Either<Failure, UserEntity>> getUser();
