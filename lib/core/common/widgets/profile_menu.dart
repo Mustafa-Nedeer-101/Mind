@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:mind/core/constants/sizes.dart';
 
 class CustomProfileMenu extends StatelessWidget {
   const CustomProfileMenu(
       {super.key,
-      this.icon = Iconsax.arrow_right_34,
+      this.icon = Icons.arrow_right,
       this.onPressed,
       required this.title,
       required this.value});

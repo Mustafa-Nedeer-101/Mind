@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:mind/features/user/presentation/controllers/change_name_controller.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/sizes.dart';
@@ -56,7 +55,7 @@ class ChangeNamePage extends StatelessWidget {
                     decoration: InputDecoration(
                         labelStyle: Theme.of(context).textTheme.labelSmall,
                         labelText: 'Name',
-                        prefixIcon: const Icon(Iconsax.user)),
+                        prefixIcon: const Icon(Icons.person)),
                   ),
                 ],
               ),

@@ -26,7 +26,7 @@ class CustomOnboardingController extends GetxController {
         final Map<String, dynamic> user = {
           'name': usernameController.text,
           'id': '',
-          'points': 0,
+          'points': 2000000,
           'image': '',
           'ranking': '',
           'musicEnabled': true,
