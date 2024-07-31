@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/constants/colors.dart';
 import '../../../../../../core/constants/sizes.dart';
 
-class CategoryCard extends StatelessWidget {
+class CategoryCard extends StatefulWidget {
   const CategoryCard(
       {super.key,
       required this.category,
@@ -12,6 +12,25 @@ class CategoryCard extends StatelessWidget {
 
   final String category, imageString;
   final int numOfQ;
+
+  @override
+  State<CategoryCard> createState() => _CategoryCardState();
+}
+
+class _CategoryCardState extends State<CategoryCard> {
+  @override
+  void initState() {
+    super.initState();
+    // Delay the preloading until after the first frame is rendered
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _preloadImage();
+    });
+  }
+
+  void _preloadImage() {
+    // Preload the image to reduce rasterization jank
+    precacheImage(AssetImage(widget.imageString), context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +53,11 @@ class CategoryCard extends StatelessWidget {
               children: [
                 // Image
                 Image(
-                  image: AssetImage(imageString),
-                  width: 100.w,
-                  height: 100.h,
+                  image: AssetImage(widget.imageString),
+                  width: 100.w, // Fixed width
+                  height: 100.h, // Fixed height
                   fit: BoxFit.contain,
+                  filterQuality: FilterQuality.low,
                 ),
 
                 // Space
@@ -53,13 +73,13 @@ class CategoryCard extends StatelessWidget {
                     children: [
                       // Category Name
                       Text(
-                        category,
+                        widget.category,
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
 
                       // Number of Questions
                       Text(
-                        "$numOfQ questions",
+                        "${widget.numOfQ} questions",
                         style: Theme.of(context).textTheme.bodyMedium,
                       )
                     ],

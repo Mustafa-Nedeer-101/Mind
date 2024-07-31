@@ -10,8 +10,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ProfileController());
-    Get.put(HomeController());
+    Get.lazyPut(() => ProfileController());
+    Get.lazyPut(() => HomeController());
 
     return GetBuilder<HomeController>(
       builder: (controller) {

@@ -18,10 +18,10 @@ class HomeController extends GetxController {
   void onInit() async {
     super.onInit();
 
-    eitherFailureOrCategories();
+    await eitherFailureOrCategories();
   }
 
-  void eitherFailureOrCategories() async {
+  Future eitherFailureOrCategories() async {
     final failureOrCategories =
         await GetCategoriesUsecase(categoryRepo: repository).call();
 
