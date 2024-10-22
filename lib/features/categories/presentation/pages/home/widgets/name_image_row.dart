@@ -32,8 +32,7 @@ class NameImageSection extends StatelessWidget {
         GestureDetector(
           onTap: () async {
             // Navigate
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const ProfilePage()));
+            Get.to(() => const ProfilePage());
           },
           child: Obx(
             () => CustomCircularImage(
