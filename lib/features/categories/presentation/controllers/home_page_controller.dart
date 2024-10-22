@@ -16,8 +16,13 @@ class HomeController extends GetxController {
 
   @override
   void onInit() async {
+    await eitherFailureOrCategories();
     super.onInit();
+  }
 
+  onUpdate() async {
+    failure = null;
+    categories = null;
     await eitherFailureOrCategories();
   }
 

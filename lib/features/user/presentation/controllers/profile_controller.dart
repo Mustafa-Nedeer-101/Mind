@@ -27,7 +27,13 @@ class ProfileController extends GetxController {
 
   @override
   void onInit() async {
+    await eitherFailureOrUser();
     super.onInit();
+  }
+
+  onUpdate() async {
+    failure = null;
+    user = null;
     await eitherFailureOrUser();
   }
 

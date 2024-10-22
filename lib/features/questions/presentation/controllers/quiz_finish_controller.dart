@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:mind/core/common/loaders/loaders.dart';
 import 'package:mind/features/user/presentation/controllers/profile_controller.dart';
-import 'package:mind/routing/routes.dart';
 import 'package:mind/core/helper_classes/audio_manager.dart';
+import 'package:mind/routing/routes.dart';
 
 class QuizFinishController extends GetxController {
   final List<List<String>> answers;
